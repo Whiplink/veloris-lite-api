@@ -11,10 +11,20 @@ if (!uri) {
 }
 
 const globalForMongo = globalThis as typeof globalThis & {
+  mongoClient?: MongoClient;
   mongoClientPromise?: Promise<MongoClient>;
 };
 
-const client = new MongoClient(uri);
+const client =
+  globalForMongo.mongoClient ??
+  new MongoClient(uri, {
+    maxPoolSize: 10,
+    minPoolSize: 0,
+    serverSelectionTimeoutMS: 10000,
+    connectTimeoutMS: 10000,
+  });
+
+globalForMongo.mongoClient = client;
 
 const clientPromise =
   globalForMongo.mongoClientPromise ??
