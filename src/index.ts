@@ -1,12 +1,10 @@
 import "dotenv/config";
 import { Hono } from "hono";
-import { serve } from "@hono/node-server";
 import { MongoClient, ObjectId } from "mongodb";
 
 const app = new Hono();
 
 const client = new MongoClient(process.env.MONGODB_URI!);
-await client.connect();
 
 const db = client.db(process.env.DB_NAME || "myapp");
 
