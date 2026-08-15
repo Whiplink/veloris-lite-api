@@ -1,0 +1,163 @@
+@baseUrl = http://localhost:3000
+
+# Replace these after creating records
+@projectId = 6a808280a6a3f7fe36decd91
+@ticketId = 68a987654321abcdef123456
+
+
+### ========================================
+### PROJECTS
+### ========================================
+
+### Create Project
+POST {{baseUrl}}/projects
+Content-Type: application/json
+
+{
+  "name": "Project 2",
+  "description": "Project description"
+}
+
+
+### Get All Projects
+GET {{baseUrl}}/projects
+
+
+### Get Single Project
+GET {{baseUrl}}/projects/{{projectId}}
+
+
+### Update Project
+PUT {{baseUrl}}/projects/{{projectId}}
+Content-Type: application/json
+
+{
+  "name": "Project Updated",
+  "description": "Project Updated"
+}
+
+
+### Delete Project
+DELETE {{baseUrl}}/projects/{{projectId}}
+
+
+### ========================================
+### TICKETS
+### ========================================
+
+### Create Ticket - High / To Do
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "{{projectId}}",
+  "name": "Fix login button",
+  "priority": "High",
+  "status": "To Do",
+  "description": "The login button does nothing when clicked"
+}
+
+
+### Create Ticket - Medium / In Progress
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "{{projectId}}",
+  "name": "Improve dashboard",
+  "priority": "Medium",
+  "status": "In Progress",
+  "description": "Improve the dashboard layout"
+}
+
+
+### Create Ticket - Low / Done
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "{{projectId}}",
+  "name": "Update footer",
+  "priority": "Low",
+  "status": "Done",
+  "description": "Update copyright information"
+}
+
+
+### Get All Tickets
+GET {{baseUrl}}/tickets
+
+### Get all tickets for a project
+GET {{baseUrl}}/projects/{{projectId}}/tickets
+
+
+### Get Single Ticket
+GET {{baseUrl}}/tickets/{{ticketId}}
+
+
+### Update Ticket
+PUT {{baseUrl}}/tickets/{{ticketId}}
+Content-Type: application/json
+
+{
+  "projectId": "{{projectId}}",
+  "name": "Fix login button",
+  "priority": "Medium",
+  "status": "In Progress",
+  "description": "Currently working on the login button"
+}
+
+
+### Delete Ticket
+DELETE {{baseUrl}}/tickets/{{ticketId}}
+
+
+### ========================================
+### VALIDATION TESTS
+### ========================================
+
+### Invalid Project ID
+GET {{baseUrl}}/projects/not-a-valid-id
+
+
+### Invalid Ticket ID
+GET {{baseUrl}}/tickets/not-a-valid-id
+
+
+### Invalid Ticket Priority
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "{{projectId}}",
+  "name": "Test invalid priority",
+  "priority": "Urgent",
+  "status": "To Do",
+  "description": "This should fail"
+}
+
+
+### Invalid Ticket Status
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "{{projectId}}",
+  "name": "Test invalid status",
+  "priority": "High",
+  "status": "Pending",
+  "description": "This should fail"
+}
+
+
+### Non-existent Project
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "projectId": "68a123456789abcdef123456",
+  "name": "Test missing project",
+  "priority": "High",
+  "status": "To Do",
+  "description": "This should fail if project does not exist"
+}
