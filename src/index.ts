@@ -4,7 +4,21 @@ import { MongoClient, ObjectId } from "mongodb";
 
 const app = new Hono();
 
-const client = new MongoClient(process.env.MONGODB_URI!);
+const uri = process.env.MONGODB_URI;
+
+if (!uri) {
+  throw new Error("MONGODB_URI is not configured");
+}
+
+const globalForMongo = globalThis as typeof globalThis & {
+  mongoClientPromise?: Promise<MongoClient>;
+};
+
+const client = new MongoClient(uri);
+
+const clientPromise =
+  globalForMongo.mongoClientPromise ??
+  (globalForMongo.mongoClientPromise = client.connect());
 
 const db = client.db(process.env.DB_NAME || "myapp");
 
